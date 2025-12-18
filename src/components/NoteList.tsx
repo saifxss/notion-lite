@@ -3,13 +3,20 @@ import type { Note } from "../types/note";
 
 interface NoteListProps {
   notes: Note[];
+  selectedNoteId: number | null;
+  onSelectNote: (id: number) => void;
 }
 
-export default function NoteList({ notes }: NoteListProps) {
+export default function NoteList({ notes, selectedNoteId, onSelectNote }: NoteListProps) {
   return (
     <div>
       {notes.map((note) => (
-        <NoteItem key={note.id} note={note} />
+        <NoteItem
+          key={note.id}
+          note={note}
+          isSelected={note.id === selectedNoteId}
+          onClick={() => onSelectNote(note.id)}
+        />
       ))}
     </div>
   );

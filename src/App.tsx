@@ -1,6 +1,8 @@
 import Header from "./components/Header";
 import NoteList from "./components/NoteList";
 import type { Note } from "./types/note";
+import { useState } from "react";
+
 
 const mockNotes: Note[] = [
   { id: 1, title: "First Note", content: "Hello world" },
@@ -10,11 +12,17 @@ const mockNotes: Note[] = [
 ];
 
 function App() {
+  const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
+
   return (
     <div>
       <Header />
       <main>
-        <NoteList notes={mockNotes} />
+        <NoteList
+          notes={mockNotes}
+          selectedNoteId={selectedNoteId}
+          onSelectNote={setSelectedNoteId}
+        />
       </main>
     </div>
   );
