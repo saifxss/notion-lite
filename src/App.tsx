@@ -1,7 +1,8 @@
 import Header from "./components/Header";
 import NoteList from "./components/NoteList";
+import NoteEditor from "./components/NoteEditor";
 import type { Note } from "./types/note";
-import { useState } from "react";
+import { useEffect , useState } from "react";
 
 const initialNotes: Note[] = [
   { id: 1, title: "First Note", content: "Hello world" },
@@ -10,8 +11,17 @@ const initialNotes: Note[] = [
 ];
 
 function App() {
-  const [notes, setNotes] = useState<Note[]>(initialNotes);
+  const [notes, setNotes] = useState<Note[]>(() => {
+    const saved = localStorage.getItem("notes");
+    return saved ? JSON.parse(saved) : initialNotes;
+  });
+
   const [selectedNoteId, setSelectedNoteId] = useState<number | null>(null);
+  const selectedNote = notes.find(n => n.id === selectedNoteId) || null;
+
+  useEffect(() => {
+    localStorage.setItem("notes", JSON.stringify(notes));
+  }, [notes]);
 
   // CREATE
   const addNote = () => {
@@ -26,7 +36,7 @@ function App() {
 
   // UPDATE
   const updateNote = (updatedNote: Note) => {
-    setNotes(notes.map(n => (n.id === updatedNote.id ? updatedNote : n)));
+    setNotes(notes.map(n => n.id === updatedNote.id ? updatedNote : n));
   };
 
   // DELETE
@@ -46,8 +56,10 @@ function App() {
         onDeleteNote={deleteNote}
         onUpdateNote={updateNote}
       />
+      <NoteEditor note={selectedNote} onChange={updateNote} />
     </div>
   );
 }
+
 
 export default App;
