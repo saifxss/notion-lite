@@ -7,6 +7,7 @@ interface NoteListProps {
   onSelectNote: (id: number) => void;
   onDeleteNote: (id: number) => void;
   onUpdateNote: (note: Note) => void;
+  onAddNote: () => void;
 }
 
 export default function NoteList({
@@ -14,20 +15,26 @@ export default function NoteList({
   selectedNoteId,
   onSelectNote,
   onDeleteNote,
-  onUpdateNote
+  onUpdateNote,
+  onAddNote
 }: NoteListProps) {
   return (
-    <div>
-      {notes.map((note) => (
-        <NoteItem
-          key={note.id}
-          note={note}
-          isSelected={note.id === selectedNoteId}
-          onClick={() => onSelectNote(note.id)}
-          onDelete={() => onDeleteNote(note.id)}
-          onUpdate={onUpdateNote}
-        />
-      ))}
+    <div className="note-list">
+      <div className="note-list-header">
+        <button className="new-note-btn" onClick={onAddNote}>+ New Note</button>
+      </div>
+      <div className="note-items">
+        {notes.map((note) => (
+          <NoteItem
+            key={note.id}
+            note={note}
+            isSelected={note.id === selectedNoteId}
+            onClick={() => onSelectNote(note.id)}
+            onDelete={() => onDeleteNote(note.id)}
+            onUpdate={onUpdateNote}
+          />
+        ))}
+      </div>
     </div>
   );
 }

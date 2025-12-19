@@ -11,19 +11,15 @@ export default function NoteEditor({ note, onChange }: NoteEditorProps) {
   }
 
   return (
-    <div>
-      <input
+    <div className="note-editor">
+      <input className="note-title"
         value={note.title}
-        onChange={(e) =>
-          onChange({ ...note, title: e.target.value })
-        }
+        onChange={(e) => onChange({ ...note, title: e.target.value })}
       />
 
-      <textarea
+      <textarea className="note-content"
         value={note.content}
-        onChange={(e) =>
-          onChange({ ...note, content: e.target.value })
-        }
+        onChange={(e) => onChange({ ...note, content: e.target.value })}
       />
     </div>
   );

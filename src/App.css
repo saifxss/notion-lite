@@ -1,0 +1,65 @@
+header {
+  height: 60px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  background: #f7f7f7;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.main-layout {
+  display: flex;          /* This puts Sidebar and Editor side-by-side */
+  height: calc(100vh - 60px); /* Fill screen minus header height */
+}
+
+.sidebar {
+  width: 300px;           /* Fixed width for the list */
+  border-right: 1px solid #ddd;
+  overflow-y: auto;       /* Scroll the list if it's long */
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+.note-list-header {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 12px;
+}
+
+.new-note-btn {
+  background: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.new-note-btn:hover { opacity: 0.95; }
+
+.note-items { display: flex; flex-direction: column; }
+
+.editor-area {
+  flex: 1;                /* Take up all remaining space */
+  padding: 40px;
+  box-sizing: border-box;
+}
+
+.note-editor {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.note-title {
+  font-size: 1.2rem;
+  padding: 8px;
+  margin-bottom: 12px;
+}
+
+.note-content {
+  flex: 1;
+  padding: 8px;
+  resize: none;
+  min-height: 200px;
+}

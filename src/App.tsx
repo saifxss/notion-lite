@@ -3,6 +3,7 @@ import NoteList from "./components/NoteList";
 import NoteEditor from "./components/NoteEditor";
 import type { Note } from "./types/note";
 import { useEffect , useState } from "react";
+import "./App.css";
 
 const initialNotes: Note[] = [
   { id: 1, title: "First Note", content: "Hello world" },
@@ -48,15 +49,21 @@ function App() {
   return (
     <div>
       <Header />
-      <button onClick={addNote}>+ New Note</button>
-      <NoteList
-        notes={notes}
-        selectedNoteId={selectedNoteId}
-        onSelectNote={setSelectedNoteId}
-        onDeleteNote={deleteNote}
-        onUpdateNote={updateNote}
-      />
-      <NoteEditor note={selectedNote} onChange={updateNote} />
+      <main className="main-layout">
+        <aside className="sidebar">
+          <NoteList
+            notes={notes}
+            onAddNote={addNote}
+            selectedNoteId={selectedNoteId}
+            onSelectNote={setSelectedNoteId}
+            onDeleteNote={deleteNote}
+            onUpdateNote={updateNote}
+          />
+        </aside>
+        <section className="editor-area">
+          <NoteEditor note={selectedNote} onChange={updateNote} />
+        </section>
+      </main>
     </div>
   );
 }

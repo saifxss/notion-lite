@@ -1,5 +1,5 @@
 import type { Note } from "../types/note";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface NoteItemProps {
   note: Note;
@@ -14,14 +14,20 @@ export default function NoteItem({ note, isSelected, onClick, onDelete, onUpdate
   const [title, setTitle] = useState(note.title);
   const [content, setContent] = useState(note.content);
 
+  useEffect(() => {
+    setTitle(note.title);
+    setContent(note.content);
+    setEditing(false);
+  }, [note.id]);
+
   const save = () => {
     onUpdate({ ...note, title, content });
     setEditing(false);
-  };
-  
+  }; 
+
  return (
     <div
-      onClick={onClick}
+      onClick={() => { onClick(); setEditing(true); }}
       style={{
         border: "1px solid gray",
         padding: "8px",
@@ -34,7 +40,7 @@ export default function NoteItem({ note, isSelected, onClick, onDelete, onUpdate
         <>
           <input value={title} onChange={(e) => setTitle(e.target.value)} />
           <textarea value={content} onChange={(e) => setContent(e.target.value)} />
-          <button onClick={save}>Save</button>
+          <button onClick={(e) => { e.stopPropagation(); save(); }}>Save</button>
         </>
       ) : (
         <>
@@ -42,8 +48,7 @@ export default function NoteItem({ note, isSelected, onClick, onDelete, onUpdate
           <p>{note.content}</p>
         </>
       )}
-      <button onClick={onDelete}>Delete</button>
-      {!editing && <button onClick={() => setEditing(true)}>Edit</button>}
+      <button onClick={(e) => { e.stopPropagation(); onDelete(); }}>Delete</button>
     </div>
   );
 }
