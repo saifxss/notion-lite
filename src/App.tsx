@@ -57,7 +57,6 @@ function App() {
             selectedNoteId={selectedNoteId}
             onSelectNote={setSelectedNoteId}
             onDeleteNote={deleteNote}
-            onUpdateNote={updateNote}
           />
         </aside>
         <section className="editor-area">

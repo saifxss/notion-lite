@@ -6,7 +6,6 @@ interface NoteListProps {
   selectedNoteId: number | null;
   onSelectNote: (id: number) => void;
   onDeleteNote: (id: number) => void;
-  onUpdateNote: (note: Note) => void;
   onAddNote: () => void;
 }
 
@@ -15,7 +14,6 @@ export default function NoteList({
   selectedNoteId,
   onSelectNote,
   onDeleteNote,
-  onUpdateNote,
   onAddNote
 }: NoteListProps) {
   return (
@@ -31,7 +29,6 @@ export default function NoteList({
             isSelected={note.id === selectedNoteId}
             onClick={() => onSelectNote(note.id)}
             onDelete={() => onDeleteNote(note.id)}
-            onUpdate={onUpdateNote}
           />
         ))}
       </div>
