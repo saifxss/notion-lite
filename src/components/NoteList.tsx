@@ -22,6 +22,11 @@ export default function NoteList({
         <button className="new-note-btn" onClick={onAddNote}>+ New Note</button>
       </div>
       <div className="note-items">
+        {notes.length === 0 && (
+          <p style={{ color: "#999", textAlign: "center" }}>
+            No notes yet
+          </p>
+        )}
         {notes.map((note) => (
           <NoteItem
             key={note.id}

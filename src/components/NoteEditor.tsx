@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect , useRef } from "react";
 import type { Note } from "../types/note";
 
 interface NoteEditorProps {
@@ -10,14 +10,24 @@ export default function NoteEditor({ note, onChange }: NoteEditorProps) {
   const [title, setTitle] = useState(note?.title ?? "");
   const [content, setContent] = useState(note?.content ?? "");
 
+  const titleRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    titleRef.current?.focus();
+  }, [note?.id]);
+
   useEffect(() => {
     setTitle(note?.title ?? "");
     setContent(note?.content ?? "");
   }, [note?.id]);
 
   if (!note) {
-    return <p>Select a note to edit</p>;
-  }
+  return (
+    <div className="text-gray-400 text-center mt-20">
+      Select a note or create a new one
+    </div>
+  );
+}
 
   const save = () => {
     onChange({ ...note, title, content });
@@ -38,7 +48,9 @@ export default function NoteEditor({ note, onChange }: NoteEditorProps) {
       />
 
       <div className="editor-actions">
-        <button className="save-btn" onClick={save} disabled={unchanged}>Save</button>
+        <button className="save-btn" onClick={save} disabled={unchanged}>
+            {unchanged ? "Saved" : "Save"}
+        </button>
       </div>
     </div>
   );
