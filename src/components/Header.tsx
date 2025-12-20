@@ -7,7 +7,7 @@ export default function Header({ theme, onToggleTheme }: HeaderProps) {
   return (
     <header>
       <h2>Notion Lite</h2>
-      <button onClick={onToggleTheme}>
+      <button className="theme-toggle-btn" onClick={onToggleTheme}>
         {theme === "light" ? "🌙 Dark" : "☀️ Light"}
       </button>
     </header>

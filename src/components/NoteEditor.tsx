@@ -9,6 +9,7 @@ interface NoteEditorProps {
 export default function NoteEditor({ note, onChange }: NoteEditorProps) {
   const [title, setTitle] = useState(note?.title ?? "");
   const [content, setContent] = useState(note?.content ?? "");
+  const [isSaving, setIsSaving] = useState(false);
 
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
@@ -19,19 +20,27 @@ export default function NoteEditor({ note, onChange }: NoteEditorProps) {
   }, [note?.id]);
 
   const isUnchanged = note ? (note.title === title && note.content === content) : true;
+  const disabled = !note;
 
   useEffect(() => {
     titleRef.current?.focus();
   }, [note?.id]);
 
   useEffect(() => {
-    if (!note || isUnchanged) return;
+    if (!note || isUnchanged) {
+      setIsSaving(false);
+      return;
+    }
+
+    setIsSaving(true);
+
     const timeout = setTimeout(() => {
       onChange({ ...note, title, content });
+      setIsSaving(false); // ✅ important
     }, 500);
 
     return () => clearTimeout(timeout);
-  }, [title, content]);
+  }, [title, content, isUnchanged, note, onChange]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -58,21 +67,28 @@ export default function NoteEditor({ note, onChange }: NoteEditorProps) {
 
   return (
     <div className="note-editor">
-      <input className="note-title"
+      <input
+        disabled={disabled}
+        className="note-title"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
 
       <textarea
         ref={contentRef}
+        disabled={disabled}
         className="note-content"
         value={content}
         onChange={(e) => setContent(e.target.value)}
       />
 
       <div className="editor-actions">
-        <button className="save-btn" onClick={save} disabled={isUnchanged}>
-            {isUnchanged ? "Saved" : "Save"}
+        <button
+          className="save-btn"
+          onClick={save}
+          disabled={isUnchanged}
+        >
+          {isSaving ? "Saving..." : isUnchanged ? "Saved" : "Save"}
         </button>
       </div>
     </div>
