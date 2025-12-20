@@ -82,6 +82,44 @@ function App() {
     if (selectedNoteId === id) setSelectedNoteId(null);
   };
 
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const isMac = navigator.platform.toUpperCase().includes("MAC");
+      const ctrl = isMac ? e.metaKey : e.ctrlKey;
+
+      // New note
+      if (ctrl && e.key === "n") {
+        e.preventDefault();
+        addNote();
+      }
+
+      // Save note
+      if (ctrl && e.key === "s") {
+        e.preventDefault();
+        if (selectedNote) {
+          updateNote(selectedNote);
+        }
+      }
+
+      // Delete note
+      if (ctrl && e.key === "Backspace") {
+        e.preventDefault();
+        if (selectedNote) {
+          deleteNote(selectedNote.id);
+        }
+      }
+
+      // Escape → deselect
+      if (e.key === "Escape") {
+        setSelectedNoteId(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [selectedNote, notes]);
+
+
   return (
     <div>
       <Header theme={theme} onToggleTheme={toggleTheme} />

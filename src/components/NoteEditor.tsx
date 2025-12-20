@@ -11,43 +11,50 @@ export default function NoteEditor({ note, onChange }: NoteEditorProps) {
   const [content, setContent] = useState(note?.content ?? "");
 
   const titleRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    titleRef.current?.focus();
-  }, [note?.id]);
+  const contentRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     setTitle(note?.title ?? "");
     setContent(note?.content ?? "");
   }, [note?.id]);
 
-  const unchanged = note ? (note.title === title && note.content === content) : true;
+  const isUnchanged = note ? (note.title === title && note.content === content) : true;
 
   useEffect(() => {
-    if (!note) return;
+    titleRef.current?.focus();
+  }, [note?.id]);
 
+  useEffect(() => {
+    if (!note || isUnchanged) return;
     const timeout = setTimeout(() => {
-        if (!unchanged) {
-        onChange({ ...note, title, content });
-        }
+      onChange({ ...note, title, content });
     }, 500);
 
     return () => clearTimeout(timeout);
   }, [title, content]);
 
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        contentRef.current?.blur();
+      }
+    };
+
+    window.addEventListener("keydown", handleEscape);
+    return () => window.removeEventListener("keydown", handleEscape);
+  }, []);
+
   if (!note) {
-  return (
-    <div className ="editor-empty">
-      Select a note or create a new one
-    </div>
-  );
-}
+    return (
+      <div className ="editor-empty">
+        Select a note or create a new one
+      </div>
+    );
+  }
 
   const save = () => {
     onChange({ ...note, title, content });
   };
-
-  
 
   return (
     <div className="note-editor">
@@ -56,14 +63,16 @@ export default function NoteEditor({ note, onChange }: NoteEditorProps) {
         onChange={(e) => setTitle(e.target.value)}
       />
 
-      <textarea className="note-content"
+      <textarea
+        ref={contentRef}
+        className="note-content"
         value={content}
         onChange={(e) => setContent(e.target.value)}
       />
 
       <div className="editor-actions">
-        <button className="save-btn" onClick={save} disabled={unchanged}>
-            {unchanged ? "Saved" : "Save"}
+        <button className="save-btn" onClick={save} disabled={isUnchanged}>
+            {isUnchanged ? "Saved" : "Save"}
         </button>
       </div>
     </div>
