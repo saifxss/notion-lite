@@ -24,8 +24,26 @@ function App() {
     localStorage.setItem("notes", JSON.stringify(notes));
   }, [notes]);
 
+  const [search, setSearch] = useState("");
+  
+  const sortedNotes = [...notes].sort(
+    (a, b) => b.updatedAt - a.updatedAt
+  );
+
+  const filteredNotes = sortedNotes.filter(note =>
+    note.title.toLowerCase().includes(search.trim().toLowerCase()) ||
+    note.content.toLowerCase().includes(search.trim().toLowerCase())
+  );
+  
+  useEffect(() => {
+    if (selectedNoteId && !filteredNotes.some(n => n.id === selectedNoteId)) {
+      setSelectedNoteId(null);
+    }
+  }, [search]);
+  
   // CREATE
   const addNote = () => {
+    setSearch("");
     const newNote: Note = {
       id: notes.length ? Math.max(...notes.map(n => n.id)) + 1 : 1,
       title: "New Note",
@@ -56,8 +74,14 @@ function App() {
       <Header />
       <main className="main-layout">
         <aside className="sidebar">
+          <input
+            className="search-input"
+            placeholder="Search notes..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
           <NoteList
-            notes={notes}
+            notes={filteredNotes}
             onAddNote={addNote}
             selectedNoteId={selectedNoteId}
             onSelectNote={setSelectedNoteId}
