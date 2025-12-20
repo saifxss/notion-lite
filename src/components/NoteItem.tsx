@@ -14,7 +14,9 @@ export default function NoteItem({ note, isSelected, onClick, onDelete }: NoteIt
       onClick={onClick}
     >
       <h3>{note.title}</h3>
-      <p>{note.content}</p>
+      <p className="note-preview">
+        {note.content.slice(0, 40)}{note.content.length > 40 ? "…" : ""}
+      </p>
       <button
         onClick={(e) => {
           e.stopPropagation();

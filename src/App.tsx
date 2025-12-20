@@ -6,9 +6,9 @@ import { useEffect , useState } from "react";
 import "./App.css";
 
 const initialNotes: Note[] = [
-  { id: 1, title: "First Note", content: "Hello world" },
-  { id: 2, title: "Second Note", content: "Another note" },
-  { id: 3, title: "Third Note", content: "Keep learning" },
+  { id: 1, title: "First Note", content: "Hello world", updatedAt: Date.now() },
+  { id: 2, title: "Second Note", content: "Another note", updatedAt: Date.now() },
+  { id: 3, title: "Third Note", content: "Keep learning", updatedAt: Date.now() },
 ];
 
 function App() {
@@ -30,6 +30,7 @@ function App() {
       id: notes.length ? Math.max(...notes.map(n => n.id)) + 1 : 1,
       title: "New Note",
       content: "Type here...",
+      updatedAt: Date.now(),
     };
     setNotes([newNote, ...notes]);
     setSelectedNoteId(newNote.id);
@@ -37,7 +38,11 @@ function App() {
 
   // UPDATE
   const updateNote = (updatedNote: Note) => {
-    setNotes(notes.map(n => n.id === updatedNote.id ? updatedNote : n));
+    setNotes(notes.map(n => n.id === updatedNote.id
+       ? { ...updatedNote, updatedAt: Date.now() }
+       : n
+      )
+    );
   };
 
   // DELETE

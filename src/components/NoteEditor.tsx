@@ -21,9 +21,23 @@ export default function NoteEditor({ note, onChange }: NoteEditorProps) {
     setContent(note?.content ?? "");
   }, [note?.id]);
 
+  const unchanged = note ? (note.title === title && note.content === content) : true;
+
+  useEffect(() => {
+    if (!note) return;
+
+    const timeout = setTimeout(() => {
+        if (!unchanged) {
+        onChange({ ...note, title, content });
+        }
+    }, 500);
+
+    return () => clearTimeout(timeout);
+  }, [title, content]);
+
   if (!note) {
   return (
-    <div className="text-gray-400 text-center mt-20">
+    <div className ="editor-empty">
       Select a note or create a new one
     </div>
   );
@@ -33,7 +47,7 @@ export default function NoteEditor({ note, onChange }: NoteEditorProps) {
     onChange({ ...note, title, content });
   };
 
-  const unchanged = note.title === title && note.content === content;
+  
 
   return (
     <div className="note-editor">

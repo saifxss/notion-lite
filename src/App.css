@@ -36,6 +36,11 @@ header {
   font-weight: 600;
 }
 
+.note-preview {
+  font-size: 0.85rem;
+  color: #666;
+}
+
 .note-list-header {
   display: flex;
   justify-content: flex-end;
@@ -59,6 +64,12 @@ header {
   flex: 1;                /* Take up all remaining space */
   padding: 40px;
   box-sizing: border-box;
+}
+
+.editor-empty {
+  color: #999;
+  text-align: center;
+  margin-top: 80px;
 }
 
 .note-editor {
