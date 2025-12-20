@@ -12,6 +12,19 @@ const initialNotes: Note[] = [
 ];
 
 function App() {
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    return (localStorage.getItem("theme") as "light" | "dark") ?? "light";
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(t => (t === "light" ? "dark" : "light"));
+  };
+
   const [notes, setNotes] = useState<Note[]>(() => {
     const saved = localStorage.getItem("notes");
     return saved ? JSON.parse(saved) : initialNotes;
@@ -34,7 +47,7 @@ function App() {
     note.title.toLowerCase().includes(search.trim().toLowerCase()) ||
     note.content.toLowerCase().includes(search.trim().toLowerCase())
   );
-  
+
   useEffect(() => {
     if (selectedNoteId && !filteredNotes.some(n => n.id === selectedNoteId)) {
       setSelectedNoteId(null);
@@ -71,7 +84,7 @@ function App() {
 
   return (
     <div>
-      <Header />
+      <Header theme={theme} onToggleTheme={toggleTheme} />
       <main className="main-layout">
         <aside className="sidebar">
           <input

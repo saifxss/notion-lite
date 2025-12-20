@@ -1,10 +1,15 @@
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
 header {
   height: 60px;
   display: flex;
   align-items: center;
   padding: 0 20px;
-  background: #f7f7f7;
-  border-bottom: 1px solid #e6e6e6;
+  background: var(--sidebar);
+  border-bottom: 1px solid var(--border);
 }
 
 .main-layout {
@@ -14,14 +19,16 @@ header {
 
 .sidebar {
   width: 300px;           /* Fixed width for the list */
-  border-right: 1px solid #ddd;
+  background: var(--sidebar);
+  border-right: 1px solid var(--border);
   overflow-y: auto;       /* Scroll the list if it's long */
   padding: 20px;
   box-sizing: border-box;
 }
 
 .note-item {
-  border: 1px solid #ddd;
+  background: var(--card);
+  border: 1px solid var(--border);
   padding: 8px;
   margin-bottom: 8px;
   cursor: pointer;
@@ -32,7 +39,7 @@ header {
 }
 
 .note-item.selected {
-  background: #e6f0ff;
+  background: rgba(0, 123, 255, 0.15);
   font-weight: 600;
 }
 
@@ -105,3 +112,19 @@ header {
 }
 
 .save-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+:root {
+  --bg: #ffffff;
+  --text: #111111;
+  --border: #dddddd;
+  --sidebar: #f7f7f7;
+  --card: #ffffff;
+}
+
+[data-theme="dark"] {
+  --bg: #0f1115;
+  --text: #e6e6e6;
+  --border: #2a2d35;
+  --sidebar: #16181d;
+  --card: #1e2128;
+}
