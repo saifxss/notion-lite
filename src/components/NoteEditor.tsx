@@ -7,9 +7,10 @@ interface NoteEditorProps {
 }
 
 export default function NoteEditor({ note, onChange }: NoteEditorProps) {
-  const [title, setTitle] = useState(note?.title ?? "");
-  const [content, setContent] = useState(note?.content ?? "");
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
   const [isSaving, setIsSaving] = useState(false);
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const titleRef = useRef<HTMLInputElement>(null);
   const contentRef = useRef<HTMLTextAreaElement>(null);
@@ -17,30 +18,35 @@ export default function NoteEditor({ note, onChange }: NoteEditorProps) {
   useEffect(() => {
     setTitle(note?.title ?? "");
     setContent(note?.content ?? "");
-  }, [note?.id]);
+    setHasUnsavedChanges(false);
+  }, [note]);
 
-  const isUnchanged = note ? (note.title === title && note.content === content) : true;
   const disabled = !note;
 
   useEffect(() => {
     titleRef.current?.focus();
-  }, [note?.id]);
+  }, [note]);
 
   useEffect(() => {
-    if (!note || isUnchanged) {
-      setIsSaving(false);
+    if (!note) return;
+
+    const changed = !(note.title === title && note.content === content);
+
+    if (!changed) {
       return;
     }
 
-    setIsSaving(true);
+    setHasUnsavedChanges(true);
 
     const timeout = setTimeout(() => {
       onChange({ ...note, title, content });
-      setIsSaving(false); // ✅ important
+      setIsSaving(false);
+      setHasUnsavedChanges(false);
     }, 500);
 
+
     return () => clearTimeout(timeout);
-  }, [title, content, isUnchanged, note, onChange]);
+  }, [title, content, note, onChange]);
 
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
@@ -62,7 +68,7 @@ export default function NoteEditor({ note, onChange }: NoteEditorProps) {
   }
 
   const save = () => {
-    onChange({ ...note, title, content });
+    onChange({ ...note!, title, content });
   };
 
   return (
@@ -86,9 +92,9 @@ export default function NoteEditor({ note, onChange }: NoteEditorProps) {
         <button
           className="save-btn"
           onClick={save}
-          disabled={isUnchanged}
+          disabled={!hasUnsavedChanges || isSaving}
         >
-          {isSaving ? "Saving..." : isUnchanged ? "Saved" : "Save"}
+          {isSaving ? "Saving..." : hasUnsavedChanges ? "Save" : "Saved"}
         </button>
       </div>
     </div>

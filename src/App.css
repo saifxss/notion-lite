@@ -36,7 +36,11 @@ header {
 }
 
 .note-item:hover {
-  background: #f5f5f5;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="dark"] .note-item:hover {
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .note-item.selected {
